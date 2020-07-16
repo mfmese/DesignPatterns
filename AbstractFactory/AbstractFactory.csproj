@@ -5,9 +5,4 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="DesignPatterns\Behavioural\" />
-    <Folder Include="DesignPatterns\Structural\" />
-  </ItemGroup>
-
 </Project>

@@ -1,21 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace DesignPatterns.Creational
+namespace Singleton
 {
-    /* Amaç: bir nesne örneğinden sadece bir defa üretilip her zaman kullanılmasını amaçlar
-     * Bir nesnenin state durumunun kontrol edilmesini sağlar
-     * Bir defa üretilir ve herkes tarafından kullanılır.
-     * Peki ne zaman kullanılmamalı: 
-     ** Singleton olarak oluşturulan nesne sürekli bellekte tutulur ve IIS restart edilene kadar orada kalır. 
-     ** Bu durumda bu nesneyi herkes aynı şekilde kullanıp kullanmayacağının önemi büyüktür. Herkes aynı nesneyi aynı şekilde kullanmayacaksa nesne singleton olmamalıdır.
-     ** Bir nesneyi sadece bir kişi istiyor ve onu da çok nadiren kullanıyorsa, nesne singleton olmamalıdır çünkü singleton nesnesi bellekte sürekli yer kaplayacaktır.
-    */
-
-    public class Singleton
+    /// <summary>
+    /// Amaç:Amaç: Bir nesne örneğinden sadece bir defa üretilip her zaman kullanılmasını amaçlar. Singleton olarak oluşturulan nesne static olduğu için bellekte her zaman yer kaplamaktadır. 
+    /// Bu nedenle sürekli olarak tüketilmesi gereken ve birçok kişi tarafından tüketilmesi gereken durumlarda singleton kullanılmalıdır. 
+    /// Nesne içeriği sürekli değişmeyen durumlarda singleton kullanılmalıdır çünkü static olduğundan dolayı güncellenmesi gereken durumlarda IIS restart edilmesi gerekecektir. 
+    /// Multithread işlemlerde farklı kullanıcılar aynı anda nesne create etmek isterse nesne birden fazla kez oluşmuş olacaktır. Bu nedenle nesne create edilmesi süreci lock edilmelidir.
+    /// Kullanımı: var object = Object.CreateAsSingleton()
+    /// </summary>
+    class Program
     {
-        public static void Run()
+        static void Main(string[] args)
         {
             //Görüldüğü üzere CustomerManager nesnemizi new keyword ile create edemiyoruz çünkü CustomerManager nesnemizin constructor'ını private olarak işaretledik.
             //CustomerManager customerManager = new CustomerManager();
@@ -28,7 +24,9 @@ namespace DesignPatterns.Creational
             //Aşağıdaki gibi CustomerManager nesnesi tekrar create edilmeye çalışıldığında nesne bir üstte create edilen nesneyi çağırdığı görülmektedir.
             var customerManager2 = CustomerManager.CreateAsSingleton();
             customerManager2.Save();
-        }        
+
+            Console.Read();
+        }
     }
 
     class CustomerManager
@@ -51,7 +49,7 @@ namespace DesignPatterns.Creational
             lock (lockObject)
             {
                 //CustomerManager nesnesi daha önceden create edilmişse var olanı döndür yoksa yeni bir CustomerManager nesnesi oluştur ve static değişkenimize atama yaparak geri döndür.
-                if(customerManager == null)
+                if (customerManager == null)
                 {
                     Console.WriteLine("CustomerManager nesnesi ilk defa create ediliyor");
                     customerManager = new CustomerManager();
@@ -59,7 +57,7 @@ namespace DesignPatterns.Creational
                 else
                 {
                     Console.WriteLine("CustomerManager nesnesi daha önceden create edilmiş");
-                }      
+                }
             }
             return customerManager;
         }
